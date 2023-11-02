@@ -49,5 +49,19 @@ io.on("connection", (socket) => {
     io.emit('getUsers', users);
   });
 
+  //send and get message
+  socket.on('sendMessage', ({ MessageId, SenderId, text, Reciever }) => {
+    const user = users.find(user => user.userId === Reciever);
+    if (user) {
+      io.to(user.id).emit('getMessage', {
+        MessageId,
+        SenderId,
+        text,
+        Reciever
+      });
+    }
+  });
+});
+
 
 app.listen( PORT , ()=> {console.log(`LISTENING AT PORT: ${PORT}`)} )
